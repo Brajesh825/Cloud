@@ -116,6 +116,6 @@ def classify_v_gesture(landmarks,landmarks2, h, w):
     accuracy = (a / 21) * 100
     
     if a == 21:
-        return "V", accuracy, correct
+        return "V", accuracy, correct, correct
     else:
-        return "Not V", accuracy, correct
+        return "Not V", accuracy, correct, correct
