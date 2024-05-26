@@ -14,7 +14,6 @@ spinner.ontransitionend = () => {
 
 function onResultsHands(results) {
 
-  console.log(results)
   // Cordinates which are required for the gesture recognition are sent to the server
   if(results.multiHandLandmarks && results.multiHandedness){
     const rightlandmarks = results.multiHandLandmarks[0];
@@ -38,11 +37,11 @@ function onResultsHands(results) {
         }
         
       }else{
-          socket.send(JSON.stringify(data));
+          socket.emit("message", JSON.stringify(data));
       }
     }
     else{
-      socket.send(JSON.stringify(data));
+      socket.emit("message", JSON.stringify(data));
     }
     
   }
@@ -121,17 +120,15 @@ new ControlPanel(controlsElement3, {
 
 
 //Handle the prediction result came from server
-const socket = new WebSocket('ws://localhost:8000');
-    socket.addEventListener('open', function (event) {
-        socket.send('Connection Established');
-    });
+var socket = io('http://127.0.0.1:5000');
+    
 
-    socket.addEventListener('message', function (event) {
+    socket.on('message', function (event) {
         var outputElement = document.getElementById('output');
         if (outputElement) {
-          var data = JSON.parse(event.data);
-          var gesture = data.gesture;
-          var accuracy = data.accuracy;
+          // var data = JSON.parse(event.data);
+          var gesture = event.gesture;
+          var accuracy = event.accuracy;
           outputElement.textContent = `Gesture: ${gesture}, Accuracy: ${accuracy}`;
           //Todo
           // Show the color according to the arrray data.correct
@@ -139,7 +136,5 @@ const socket = new WebSocket('ws://localhost:8000');
         }
     });
     
-    const contactServer = () => {
-        socket.send("Initialize");
-    }
+    
 

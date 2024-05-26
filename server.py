@@ -1,63 +1,46 @@
-import asyncio
-import websockets
-import math
-import json
+from flask import Flask, request, jsonify, render_template
+from flask_socketio import SocketIO, emit
 from Symbols.U import classify_u_gesture
-from Symbols.A import classifyAgesture
+from Symbols.A import classify_a_gesture
+from Symbols.V import classify_v_gesture
+import json
 
-async def echo(websocket):
-    async for data in websocket:
-        if data:  # check if data is not empty
-            try:
+app = Flask(__name__)
+socketio = SocketIO(app, cors_allowed_origins=["http://127.0.0.1:3000", "http://localhost:5000", "http://127.0.0.1:5000"])
 
-                #Geeting data send from socket
-                originalData = json.loads(data)
-                
-                instruction = originalData.get('instructions', None)
-                rightLandmarks = originalData.get('rightlandmarks', None)
-                leftLandmarks = originalData.get('leftlandmarks', None)
-                height = originalData.get('height', None)
-                width = originalData.get('width', None)
+@app.route('/home')  # Define the route for the root URL
+def home():
+    return render_template('hands.html')
 
-                # Define a dictionary to act as a switch-case
-                switch = {
-                    'A': classifyAgesture,
-                    'U': classify_u_gesture,
-                    # Add more instructions as needed
-                }
+@socketio.on('message')
+def handle_message(data):
+    if data:  # check if data is not empty
+        try:
+            # Getting data sent from socket
+            originalData = json.loads(data)
 
-                # Get the function from switch dictionary with the instruction as key
-                CheckAccuracy = switch.get(instruction, None)
+            instruction = originalData.get('instructions', None)
+            rightLandmarks = originalData.get('rightlandmarks', None)
+            leftLandmarks = originalData.get('leftlandmarks', None)
+            height = originalData.get('height', None)
+            width = originalData.get('width', None)
 
-                if CheckAccuracy:
+            # Define a dictionary to act as a switch-case
+            switch = {
+                'A': classify_a_gesture,
+                'U': classify_u_gesture,
+                'V': classify_v_gesture,
+                # Add your cases here
+            }
 
-                    # Call the function
-                    gesture, accuracy, correct = CheckAccuracy(rightLandmarks,leftLandmarks, height, width)
+            # Use the switch-case dictionary
+            function_to_execute = switch.get(instruction, None)
+            if function_to_execute:
+                gesture, accuracy, correct1, correct2 = function_to_execute(rightLandmarks, leftLandmarks, height, width)
+                emit('message', {'gesture': gesture, 'accuracy': accuracy, 'correct': correct1, 'correct2' : correct2 })
 
-                    # Send the response back to the client
-                    response = {
-                        'gesture': gesture,
-                        'accuracy': accuracy,
-                        'correct': correct
-                    }
-                    await websocket.send(json.dumps(response))
+        except Exception as e:
+            print(f"Error: {e}")
 
-                else:
-                    #Sign yet to implement
-                    print(f"Unknown instruction: {instruction}")
-
-            #Recived Data is invalid       
-            except json.JSONDecodeError:
-                print("Received data is not a valid JSON string")
-            
-
-async def main():
-    async with websockets.serve(echo, "localhost", 8000):
-        await asyncio.Future()  # run forever
-
-async def send_message():
-    uri = "ws://localhost:8000"
-    async with websockets.connect(uri) as websocket:
-        await websocket.send("Hello, Server!")
-
-asyncio.run(main())
+if __name__ == '__main__':
+    socketio.run(app)

@@ -84,6 +84,6 @@ def classify_u_gesture(landmarks,landmarks2, h, w):
     accuracy = (a / 21) * 100
     
     if a == 21:
-        return "U", accuracy, correct
+        return "U", accuracy, correct, 
     else:
         return "Not U", accuracy, correct
