@@ -13,6 +13,7 @@ app = Flask(__name__)
 socketio = SocketIO(app,cors_allowed_origins=[
     "http://127.0.0.1:3000", 
     "http://localhost:5000", 
+    "http://localhost:3000", 
     "http://127.0.0.1:5000", 
     "http://0.0.0.0:10000/",
     "https://cloud-hjiq.onrender.com",

@@ -120,11 +120,10 @@ new ControlPanel(controlsElement3, {
 
 
 //Handle the prediction result came from server
-const socket = io('wss://cloud-hjiq.onrender.com', {
+const socket = io('wss://cloud-zu3h.onrender.com', {
   transports: ['websocket'], 
   upgrade: false
 });
-
     socket.on('message', function (event) {
         var outputElement = document.getElementById('output');
         if (outputElement) {
