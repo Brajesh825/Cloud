@@ -18,7 +18,6 @@ def classify_a_gesture(landmarks1, landmarks2, h, w):
     # Check if the thumb tips of both hands are touching and all other fingers are closed
     if distance < distance_threshold and fingers_closed(landmarks1) and fingers_closed(landmarks2):
         accuracy = 100 - (distance * 100 / 2)
-        
         return "A", correct1, correct2, accuracy
     else:
         if not fingers_closed(landmarks1):
@@ -51,4 +50,5 @@ def classify_a_gesture(landmarks1, landmarks2, h, w):
             accuracy = 0
         else:
             accuracy = 0  # Set accuracy to 0 when the gesture is not "A"
+
         return "Not A", accuracy, correct1, correct2

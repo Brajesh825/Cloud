@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
+import json
 from Symbols.U import classify_u_gesture
 from Symbols.A import classify_a_gesture
 from Symbols.V import classify_v_gesture
-import json
+from Symbols.B import classify_b_gesture
+from Symbols.P import classify_p_gesture
+
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins=["http://127.0.0.1:3000", "http://localhost:5000", "http://127.0.0.1:5000"])
@@ -28,6 +31,8 @@ def handle_message(data):
             # Define a dictionary to act as a switch-case
             switch = {
                 'A': classify_a_gesture,
+                'B': classify_b_gesture,
+                'P': classify_p_gesture,
                 'U': classify_u_gesture,
                 'V': classify_v_gesture,
                 # Add your cases here
