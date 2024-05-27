@@ -47,5 +47,5 @@ def handle_message(data):
         except Exception as e:
             print(f"Error: {e}")
 
-if __name__ == '__main__':
-    socketio.run(app)
+# if __name__ == '__main__':
+#     socketio.run(app)
