@@ -18,7 +18,11 @@ socketio = SocketIO(app,cors_allowed_origins=[
     "http://0.0.0.0:10000/",
     "https://cloud-hjiq.onrender.com",
     "wss://cloud-hjiq.onrender.com",
-    "https://cloud-hjiq.onrender.com"  # Add this line
+    "https://cloud-hjiq.onrender.com",
+    "wss://cloud-zu3h.onrender.com",
+    "https://howbee-ecpg.onrender.com",
+    "https://howbee-ecpg.onrender.com/"
+        # Add this line
 ], engineio_logger=True, logger=True)
 
 @app.route('/home')  # Define the route for the root URL
