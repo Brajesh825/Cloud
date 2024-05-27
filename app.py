@@ -9,7 +9,7 @@ from Symbols.P import classify_p_gesture
 
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins=["http://127.0.0.1:3000", "http://localhost:5000", "http://127.0.0.1:5000", "https://cloud-zu3h.onrender.com"])
+socketio = SocketIO(app, cors_allowed_origins=["http://127.0.0.1:3000", "http://localhost:5000", "http://127.0.0.1:5000", "http://0.0.0.0:10000/"])
 
 @app.route('/home')  # Define the route for the root URL
 def home():
@@ -47,5 +47,5 @@ def handle_message(data):
         except Exception as e:
             print(f"Error: {e}")
 
-# if __name__ == '__main__':
-#     socketio.run(app)
+if __name__ == '__main__':
+    socketio.run(app)
