@@ -120,7 +120,7 @@ new ControlPanel(controlsElement3, {
 
 
 //Handle the prediction result came from server
-const socket = io('wss://cloud-zu3h.onrender.com', {
+const socket = io('ws://13.233.137.106:5000/', {
   transports: ['websocket'], 
   upgrade: false
 });

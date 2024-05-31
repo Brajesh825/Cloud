@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 from flask_socketio import SocketIO, emit
 import json
+import asyncio
 from Symbols.U import classify_u_gesture
 from Symbols.A import classify_a_gesture
 from Symbols.V import classify_v_gesture
@@ -25,12 +26,13 @@ socketio = SocketIO(app,cors_allowed_origins=[
         # Add this line
 ], engineio_logger=True, logger=True)
 
-@app.route('/home')  # Define the route for the root URL
+@app.route('/')  # Define the route for the root URL
 def home():
     return render_template('hands.html')
 
 @socketio.on('message')
 def handle_message(data):
+
     if data:  # check if data is not empty
         try:
             # Getting data sent from socket
@@ -61,5 +63,5 @@ def handle_message(data):
         except Exception as e:
             print(f"Error: {e}")
 
-# if __name__ == '__main__':
-#     socketio.run(app)
+if __name__ == '__main__':
+    socketio.run(app.run(host='0.0.0.0', port=5000))
